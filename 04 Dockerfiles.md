@@ -3,6 +3,7 @@
 ## ¿Qué aprenderás?
 - Estructura de un Dockerfile.
 - Buenas prácticas: imágenes multistage para optimizar tamaño y seguridad.
+- Cómo construir y ejecutar imágenes y contenedores a partir de tu Dockerfile.
 
 ---
 
@@ -19,12 +20,6 @@ RUN npm install              # 4. Instala dependencias
 COPY . .                     # 5. Copia el resto del código fuente
 CMD ["node", "index.js"]     # 6. Comando por defecto al iniciar el contenedor
 ```
-para construir nuestro contenedor desde un Dockerfile 
-```bash
-docker build .
-```
-
-
 
 **¿Qué hace cada instrucción?**
 
@@ -36,26 +31,27 @@ docker build .
 | `RUN`       | Ejecuta comandos durante la construcción  | `RUN npm install`            |
 | `CMD`       | Comando por defecto al iniciar            | `CMD ["node", "index.js"]`   |
 
-**Visual del flujo:**
+---
 
-```
-Tu código fuente
-      |
-      v
-+--------------------+
-|    Dockerfile      |
-+--------------------+
-      |
-      v
-+--------------------+
-|    Imagen Docker   |
-+--------------------+
-      |
-      v
-+--------------------+
-| Contenedor listo   |
-+--------------------+
-```
+### 🚀 ¿Cómo construir y ejecutar tu imagen?
+
+1. **Guarda el Dockerfile en tu proyecto**  
+   Asegúrate de tener tu código fuente (por ejemplo, `index.js` y `package.json`) en la misma carpeta que tu `Dockerfile`.
+
+2. **Construye la imagen Docker:**  
+   Abre la terminal en la carpeta donde está tu Dockerfile y ejecuta:
+   ```bash
+   docker build -t mi-app-node .
+   ```
+   Esto crea una imagen llamada `mi-app-node`.
+
+3. **Ejecuta un contenedor a partir de la imagen:**  
+   ```bash
+   docker run --rm -it -p 3000:3000 mi-app-node
+   ```
+   - `--rm` elimina el contenedor al salir.
+   - `-it` te permite interactuar con el contenedor.
+   - `-p 3000:3000` expone el puerto interno 3000 al 3000 de tu máquina (ajústalo según tu app).
 
 ---
 
@@ -79,36 +75,23 @@ COPY --from=build /app/dist ./dist
 CMD ["node", "dist/index.js"]
 ```
 
-**¿Cómo funciona?**
+---
 
-1. **Etapa de Build:**  
-   - Instala dependencias y genera archivos en `/app/dist`.
-   - Contiene herramientas de desarrollo y todo el código fuente.
+### 🚀 ¿Cómo construir y ejecutar una imagen multistage?
 
-2. **Etapa Final:**  
-   - Usa una imagen base más ligera (`node:18-slim`).
-   - Solo copia los archivos necesarios para ejecutar la app (`/app/dist`).
-   - No incluye dependencias de desarrollo, código fuente ni herramientas innecesarias.
+1. **Guarda el Dockerfile multistage en tu proyecto**  
+   Asegúrate de tener tu código fuente y el script `npm run build` definido en tu `package.json`.
 
-**Visual del flujo multistage:**
+2. **Construye la imagen Docker:**  
+   ```bash
+   docker build -t mi-app-node-prod .
+   ```
+   Esto crea una imagen optimizada llamada `mi-app-node-prod`.
 
-```
-+---------------------+
-|   Etapa 1: build    |
-|  node:18            |
-|  + npm install      |
-|  + npm run build    |
-+----------+----------+
-           |
-           |  (Solo /app/dist se copia)
-           v
-+---------------------+
-|   Etapa 2: final    |
-|  node:18-slim       |
-|  + /app/dist        |
-|  + node dist/index  |
-+---------------------+
-```
+3. **Ejecuta el contenedor (ajusta puertos según tu app):**  
+   ```bash
+   docker run --rm -it -p 3000:3000 mi-app-node-prod
+   ```
 
 ---
 
@@ -116,10 +99,10 @@ CMD ["node", "dist/index.js"]
 
 - **Usa `.dockerignore`** para evitar copiar archivos innecesarios.
 - **Define variables de entorno** con `ENV` si es necesario.
-- **No uses root**: especifica un usuario no root para mayor seguridad (`USER`).
+- **No uses root:** especifica un usuario no root (`USER`) para mayor seguridad.
 - **Agrupa comandos RUN** para reducir capas.
 - **Prefiere imágenes oficiales y ligeras** (`-slim`, `-alpine`).
 
 ---
 
-**¡Con esto podrás escribir Dockerfiles eficientes y seguros para tus proyectos!**
+**¡Con esto podrás escribir, construir y ejecutar Dockerfiles eficientes y seguros para tus proyectos!**

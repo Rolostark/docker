@@ -1,18 +1,18 @@
-# 4. Sintaxis de Dockerfile y Buenas Prácticas (Multistage) con tu Proyecto
+# 4. Sintaxis de Dockerfile y Buenas Prácticas (Multistage) con el Proyecto `mi-proyecto-app`
 
 ## ¿Qué aprenderás?
-- Estructura de un Dockerfile.
+- Estructura de un Dockerfile usando tu proyecto real.
 - Buenas prácticas: imágenes multistage para optimizar tamaño y seguridad.
-- Cómo construir y ejecutar imágenes y contenedores usando tu proyecto real.
+- Cómo construir y ejecutar imágenes y contenedores de **mi-proyecto-app**.
 
 ---
 
 ## 1. Sintaxis básica de un Dockerfile
 
-Un Dockerfile define cómo se construye una imagen. Por ejemplo, para una app Node.js típica:
+Un Dockerfile define cómo se construye una imagen. Por ejemplo, para tu app Node.js:
 
 ```Dockerfile
-# Dockerfile simple para Node.js
+# Dockerfile simple para mi-proyecto-app
 FROM node:18
 WORKDIR /app
 COPY package*.json ./
@@ -25,7 +25,7 @@ CMD ["node", "index.js"]
 
 | Instrucción | Descripción                               |
 |-------------|-------------------------------------------|
-| `FROM`      | Imagen base (por ejemplo, Node.js 18)     |
+| `FROM`      | Imagen base (Node.js 18)                  |
 | `WORKDIR`   | Carpeta de trabajo dentro del contenedor  |
 | `COPY`      | Copia archivos desde tu proyecto real     |
 | `RUN`       | Ejecuta comandos durante el build         |
@@ -33,14 +33,14 @@ CMD ["node", "index.js"]
 
 ---
 
-### 🚀 ¿Cómo construir y ejecutar tu imagen y contenedor?
+### 🚀 ¿Cómo construir y ejecutar `mi-proyecto-app`?
 
 1. **Ubícate en la raíz del proyecto (donde está tu Dockerfile):**
    ```bash
-   cd ruta/a/tu/proyecto
+   cd ruta/a/mi-proyecto-app
    ```
 
-2. **Construye la imagen Docker con un nombre personalizado:**
+2. **Construye la imagen Docker:**
    ```bash
    docker build -t mi-proyecto-app .
    ```
@@ -55,10 +55,10 @@ CMD ["node", "index.js"]
 
 ## 2. Buenas prácticas: Multistage builds
 
-Las **multistage builds** permiten crear imágenes finales más ligeras, copiando solo lo necesario para ejecutar tu app.
+Las **multistage builds** permiten crear imágenes finales más ligeras, copiando solo lo necesario para ejecutar la app.
 
 ```Dockerfile
-# Dockerfile multistage para Node.js
+# Dockerfile multistage para mi-proyecto-app
 FROM node:18 AS build
 WORKDIR /app
 COPY . .
@@ -76,12 +76,12 @@ CMD ["node", "dist/index.js"]
 
 1. **Construye tu imagen optimizada:**
    ```bash
-   docker build -t mi-proyecto-prod .
+   docker build -t mi-proyecto-app:prod .
    ```
 
 2. **Ejecuta el contenedor de producción:**
    ```bash
-   docker run --rm -it -p 3000:3000 mi-proyecto-prod
+   docker run --rm -it -p 3000:3000 mi-proyecto-app:prod
    ```
 
 ---
@@ -89,10 +89,10 @@ CMD ["node", "dist/index.js"]
 ## Consejos adicionales
 
 - **Usa un archivo `.dockerignore`** para evitar copiar archivos innecesarios (por ejemplo, `node_modules`, `.git`, etc.).
-- **Asegúrate de tener scripts de build en tu `package.json`** si usas multistage (`npm run build`).
-- **Personaliza el puerto expuesto** en el comando `docker run` según el de tu proyecto.
+- **Verifica que tengas scripts de build en tu `package.json`** si usas multistage (`npm run build`).
+- **Personaliza el puerto expuesto** en el comando `docker run` según el de tu app.
 - **Verifica los logs y errores** usando `docker logs <nombre-contenedor>` si algo no funciona.
 
 ---
 
-**¡Con esto puedes dockerizar, construir y ejecutar tu propio proyecto de forma profesional y eficiente!**
+**¡Con esto dockerizas, construyes y ejecutas tu propio proyecto `mi-proyecto-app` de forma profesional y eficiente!**

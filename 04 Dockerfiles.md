@@ -19,6 +19,12 @@ RUN npm install              # 4. Instala dependencias
 COPY . .                     # 5. Copia el resto del código fuente
 CMD ["node", "index.js"]     # 6. Comando por defecto al iniciar el contenedor
 ```
+para construir nuestro contenedor desde un Dockerfile 
+```bash
+docker build .
+```
+
+
 
 **¿Qué hace cada instrucción?**
 

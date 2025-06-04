@@ -13,7 +13,7 @@ Un **bind mount** conecta una carpeta del sistema anfitrión (host) con una ruta
 
 **Ejemplo:** Montar la carpeta actual del host en `/app` del contenedor:
 ```bash
-docker run -v $(pwd):/app node:18
+docker run -v "${PWD}:/app" node:18
 ```
 - Los archivos que edites en tu máquina local se verán directamente dentro del contenedor.
 - Útil para desarrollo y pruebas.
